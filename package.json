@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "pnpm dev:db:detached && pnpm --filter api dev & pnpm --filter savannah dev",
+    "dev:fe": "pnpm --filter savannah dev",
+    "dev:be": "pnpm --filter api dev",
+    "dev:db": "bash scripts/check-docker.sh && docker compose up -d",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

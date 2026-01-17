@@ -12,7 +12,10 @@ const DATABASE_URL =
 
 export async function runMigrations() {
   const { Client } = await import('pg');
-  const client = new Client({ connectionString: DATABASE_URL });
+  const client = new Client({ 
+    connectionString: DATABASE_URL,
+    connectionTimeoutMillis: 5000, // 5 second timeout
+  });
 
   try {
     await client.connect();
@@ -61,7 +64,12 @@ export async function runMigrations() {
     console.log('All migrations completed');
   } catch (err) {
     console.error('Migration failed:', err);
-    process.exit(1);
+    if (err instanceof Error) {
+      if (err.message.includes('timeout') || err.message.includes('ECONNREFUSED')) {
+        console.error('\n⚠️  Database connection failed. Make sure:');
+      }
+    }
+    throw err;
   } finally {
     await client.end();
   }
