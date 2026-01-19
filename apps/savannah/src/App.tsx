@@ -22,7 +22,7 @@ function generateRandomUser() {
 }
 
 function App() {
-    const { users, createUser, isCreating, deleteUser } = useUsers();
+    const { users, createUser, isCreating, deleteUser, updateUser } = useUsers();
 
     const handleCreateRandomUser = () => {
         const randomUser = generateRandomUser();
@@ -30,35 +30,41 @@ function App() {
     };
 
     return (
-        <>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <div>
                 <h1>Welcome to the Savannah</h1>
             </div>
             <div>
                 <img src={logo} style={{ height: '50vh' }} alt="Savannah" />
             </div>
-            <div>
-                <button onClick={handleCreateRandomUser} disabled={isCreating}>
-                    {isCreating ? 'Creating...' : 'Create Random User'}
-                </button>
-            </div>
-            {users && users.length > 0 && (
-                <div>
-                    <h2>Users ({users.length})</h2>
-                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        {users.map((user) => (
-                            <li key={user.id} style={{ display: 'flex', gap: '10px' }}>
-                                <div>
+            <div style={{ display: 'flex', flexDirection: 'column', padding: '10px' }}>
 
-                                    {user.first_name} {user.last_name}
-                                </div>
-                                <button onClick={() => deleteUser(user.id)}>Delete</button>
-                            </li>
-                        ))}
-                    </ul>
+                <div>
+                    <button onClick={handleCreateRandomUser} disabled={isCreating}>
+                        {isCreating ? 'Creating...' : 'Create Random User'}
+                    </button>
                 </div>
-            )}
-        </>
+                {users && users.length > 0 && (
+                    <div>
+                        <h2>Users ({users.length})</h2>
+                        <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {users.map((user) => (
+                                <li key={user.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
+                                    <p>
+                                        {user.first_name} {user.last_name}
+                                    </p>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+
+                                        <button onClick={() => deleteUser(user.id)}>Delete</button>
+                                        <button onClick={() => updateUser({ id: user.id, first_name: 'Updated ' + user.first_name, })}>Update First Name</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+        </div>
     );
 }
 
